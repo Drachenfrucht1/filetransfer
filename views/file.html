@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html data-theme="light">
+    <head>
+        <title>Filetransfer</title>
+        <script src="/static/qrcode.js"></script>
+        <link rel="stylesheet" href="/static/all.min.css" />
+        <link rel="stylesheet" href="/static/pico.min.css">
+        <link rel="stylesheet" href="/static/file.css" />
+    </head>
+    <body> 
+        <nav>
+            <ul>
+
+            </ul>
+            <ul>
+                <li><a href="/"><strong>Filetransfer</strong></a></li>
+            </ul>
+            <ul>
+
+            </ul>
+        </nav>
+        <main class="container">
+            <div class="grid">
+                <div style="display: table;">
+                    <div style="display:table-cell; vertical-align: middle;">
+                        <a href="/f/d/{{id}}"><i class="fa-solid fa-file-arrow-down"></i> {{f}}</a>
+                    </div>
+                </div>
+                <div class="container">
+                    <div id="qrcode"></div>
+                </div>
+            </div>
+            <div id="url-holder" onclick="copyText()"><input id="url-text" type="text" disabled /><a><i class="fa-solid fa-copy fa-xl"></i></a></div>
+        </main>
+        <footer>
+            <div class="grid" style="text-align: center;">
+                <div>About</div>
+                <div><i class="fa-solid fa-code"></i> by <a href="https://github.com/Drachenfrucht1" >Drachenfrucht1</a> with <i class="fa-solid fa-heart"></i></div>
+                <div>Impressum</div>
+            </div>
+        </footer>
+
+        <script>
+            var qrcode = new QRCode(document.getElementById('qrcode'), {
+                text: window.location,
+                width: 128,
+                height: 128,
+                colorDark: "#000000",
+                colorLight: "#FFFFFF",
+                correctLevel: QRCode.CorrectLevel.H,
+            });
+
+            document.getElementById('url-text').value = window.location
+
+            function copyText() {
+                navigator.clipboard.writeText(window.location);
+                document.getElementById('url-holder').setAttribute('data-tooltip', 'Copied!');
+                setTimeout(() => {
+                    document.getElementById('url-holder').removeAttribute('data-tooltip');
+                }, 1000);
+            }
+        </script>
+    </body>
+</html>

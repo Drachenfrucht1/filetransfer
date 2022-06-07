@@ -1,0 +1,95 @@
+#drop_zone {
+    border: 2px solid rgb(100, 173, 241);
+    border-radius: 5px;
+    margin: auto;
+    padding: 2px;
+    display: table;
+    width: 200px;
+    height: 150px;
+}
+#drop_zone.dragover {
+    border: 5px solid rgb(100, 173, 241);
+}
+#drop_zone_inner {
+    background-color: #e6e6e6;
+    border-radius: 5px;
+    border: 1px solid white;
+    height: 100%;
+    width: 100%;
+    font-size: small;
+
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+.hovercursor:hover {
+    cursor: pointer;
+}
+.deactivated {
+    display: none;
+}
+.hidden {
+    visibility: hidden;
+}
+
+#progress {
+    margin: 10px 0 0 0;
+}
+
+#upload_dialog {
+    margin: 10% 20% 20%;
+    text-align: center;
+}
+
+@media (orientation: landscape) and (max-width: 575px) {
+    #drop_zone {
+        width: 200px;
+        height: 150px;
+    }
+}
+
+@media (orientation: landscape) and (min-width: 576px) and (max-width: 767px) {
+    #drop_zone {
+        width: 400px;
+        height: 350px;
+    }
+}
+@media (orientation: landscape) and (min-width: 768px) and (max-width: 991px) {
+    #drop_zone {
+        width: 500px;
+        height: 350px;
+    }
+}
+@media (orientation: landscape) and (min-width: 992px) and (max-width: 1199px) {
+    #drop_zone {
+        width: 700px;
+        height: 500px;
+    }
+}
+@media (orientation: landscape) and (min-width: 1200px) {
+    #drop_zone {
+        width: 800px;
+        height: 550px;
+    }
+}
+
+/*Mobiles (portrait mode)*/
+@media (orientation: portrait) and (max-width: 575px) {
+    #drop_zone {
+        width: 200px;
+        height: 300px;
+    }
+}
+
+@media (orientation: portrait) and (min-width: 576px) and (max-width: 767px) {
+    #drop_zone {
+        width: 400px;
+        height: 700px;
+    }
+}
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 991px) {
+    #drop_zone {
+        width: 500px;
+        height: 900px;
+    }
+}

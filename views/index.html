@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html data-theme="light">
+    <head>
+        <title>Filetransfer</title>
+        <link rel="stylesheet" href="/static/pico.min.css" />
+        <link rel="stylesheet" href="/static/all.min.css" />
+        <link rel="stylesheet" href="/static/index.css" />
+        <script src="/static/modal.js"></script>
+        <script src="/static/index.js"></script>
+    </head>
+    <body>
+        <nav>
+            <ul>
+
+            </ul>
+            <ul>
+                <li><a href="/"><strong>Filetransfer</strong></a></li>
+            </ul>
+            <ul>
+
+            </ul>
+        </nav>
+        <main class="container">
+            <div id="drop_container">
+                <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+                    <div id="drop_zone_inner" ondrop="dropHandler(event);" ondragenter="dragEnterHandler(event);" ondragleave="dragLeaveHandler(event);" ondragover="dragOverHandler(event);">
+                        Drop file here or click <a id="file-input-label" class="hovercursor" onclick="openFileExplorer()">here</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="deactivated" id="upload_dialog">
+                <span id="file_name"></span> <a class="hovercursor" onclick="showDropzone()"><i style="color: red;" class="fa-solid fa-circle-xmark"></i></a>
+                <progress id="progress" class="hidden" value="0" max="100"></progress>
+                <button style="width: 50%;margin: auto;margin-top: 10px;" onclick="upload()">Upload</button>
+            </div>
+        </main>
+        <footer>
+            <div class="grid" style="text-align: center;">
+                <div>About</div>
+                <div><i class="fa-solid fa-code"></i> by <a href="https://github.com/Drachenfrucht1" >Drachenfrucht1</a> with <i class="fa-solid fa-heart"></i></div>
+                <div>Impressum</div>
+            </div>
+        </footer>
+
+        <dialog id="error-modal">
+            <article>
+                <p>
+                    An error occured while uploading the file. Please try again.
+                </p>
+                <footer>
+                    <button class="secondary"  onclick="toggleModal(event)" data-target="error-modal">Close</button>
+                </footer>
+            </article>
+        </dialog>
+
+        <input class="deactivated" id="file-input" type="file" onchange="fileChange(event)" />
+    </body>
+</html>
