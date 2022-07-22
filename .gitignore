@@ -6,3 +6,4 @@ static/pico.min.css
 static/qrcode.js
 static/all.min.css
 config.py
+env
