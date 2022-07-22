@@ -3,7 +3,7 @@ import redis
 
 from random import random
 from datetime import datetime
-import cherrypy
+
 
 import storage
 
