@@ -1,6 +1,7 @@
 import  abc
 from inspect import signature
 import os
+from typing import IO, Any
 
 from config import config
 
@@ -27,11 +28,15 @@ class StorageDriver(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def get(self, id):
+    def get(self, id) -> (str | IO):
+        pass
+
+    @abc.abstractmethod
+    def required_config(self) -> dict[str, Any]:
         pass
 
 class FileSystemStorageDriver(StorageDriver):
-    def store(self, id, file):
+    def store(self, id, file) -> (None | str):
         # see FileUpload._copy_file
         chunksize = 2 ** 16
         with open(os.path.join(config['file_location'], id), 'wb') as f:
@@ -45,3 +50,16 @@ class FileSystemStorageDriver(StorageDriver):
 
     def get(self, id):
         return open(os.path.join(config['file_location'], id), 'rb')
+
+    def required_config(self) -> list[str]:
+        return {'file_location', 'files'}
+
+class S3StorageDriver(StorageDriver):
+    def store(self, id, file):
+        pass
+
+    def delete():
+        pass
+
+    def get(self, id):
+        pass

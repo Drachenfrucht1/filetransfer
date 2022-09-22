@@ -7,8 +7,6 @@ from datetime import datetime
 
 import storage
 
-from config import config
-
 app = Bottle()
 
 class FileTransferApp():
@@ -34,15 +32,16 @@ class FileTransferApp():
         def upload_handler():
             f = request.files.get('file')
             h = hash(datetime.now().timestamp()+random())
+
+            f_name = f.filename if f is not None else 'name'
             # get a new hash that is not currently in use
-            while self.r.set(h, f.filename, ex=10*60, nx=True) == None:
+            while self.r.set(h, f_name, ex=10*60, nx=True) == None:
                 h = hash(datetime.now().timestamp()+random())
 
             # set additional attributes
             self.r.set(str(h) + '-t', f.content_type, ex=10*60+10)
             self.r.set(str(h) + '-l', f.content_length, ex=10*60+10)
 
-            # f.save(os.path.join(config['file_location'],str(h)), overwrite=True)
             storage.store(str(h), f.file)
             return template('{{hash_value}}', hash_value=str(h))
         
