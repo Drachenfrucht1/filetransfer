@@ -23,7 +23,7 @@
             <div class="grid">
                 <div style="display: table;">
                     <div style="display:table-cell; vertical-align: middle;">
-                        <a href="/f/d/{{id}}"><i class="fa-solid fa-file-arrow-down"></i> {{f}}</a>
+                        <a onclick="download_button()" href="/f/d/{{id}}"><i class="fa-solid fa-file-arrow-down"></i> {{f}}</a>
                     </div>
                 </div>
                 <div class="container">
@@ -41,6 +41,8 @@
         </footer>
 
         <script>
+            var extern = {{extern}}
+            
             var qrcode = new QRCode(document.getElementById('qrcode'), {
                 text: window.location,
                 width: 128,
@@ -50,7 +52,22 @@
                 correctLevel: QRCode.CorrectLevel.H,
             });
 
-            document.getElementById('url-text').value = window.location
+            document.getElementById('url-text').value = window.location;
+
+            async function download_button(e) {
+                if (!extern) {
+                    return
+                }
+                e.preventDefault()
+                let url_response = await fetch("/f/d/{{id}}")
+                if (!url_response.ok) {
+                    console.error("Error occured while fetching download url")
+                    return
+                }
+                let url = await url_response.text()
+                console.log(url)
+                window.location.replace(url)
+            }
 
             function copyText() {
                 navigator.clipboard.writeText(window.location);

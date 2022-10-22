@@ -16,9 +16,11 @@ def check_config():
     if not 'storage_driver' in config:
         config['storage_driver'] = FileSystemStorageDriver
 
+    global s
     try:
-        s = config['storage_driver']()
-    except:
+        s = config['storage_driver'](config)
+    except Exception as e:
+        logging.error(e)
         logging.error('Failed to create storage driver')
         logging.error('Exiting...')
         exit(2)

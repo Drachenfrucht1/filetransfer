@@ -54,32 +54,78 @@ function dragEnterHandler(e) {
 /**
  * Upload the file to the server and redirect on success
  */
-function upload() {
-    var formData = new FormData();
-    var client = new XMLHttpRequest();
-    formData.append('file', file);
-
-    client.onerror = e => {
-        openModal(document.getElementById('error-modal'));
-        resetProgress();
-    }
-
-    client.onload = e => {
-        if (e.target.status == 200) {
-            window.location.replace("/f/" + e.target.response)
+async function upload() {
+    if (extern) {
+        let url_response = await fetch('/u')
+        if (!url_response.ok) {
+            openModal(document.getElementById('error-modal'));
+            return
         }
-        openModal(document.getElementById('error-modal'));
-        resetProgress();
+        let url = await url_response.text()
+
+        var formData = new FormData();
+        var client = new XMLHttpRequest();
+        
+        var json = JSON.parse(url)
+        url = json['url']
+        formData.append('key', json['key'])
+        formData.append('x-amz-algorithm', json['x-amz-algorithm'])
+        formData.append('x-amz-credential', json['x-amz-credential'])
+        formData.append('x-amz-date', json['x-amz-date'])
+        formData.append('policy', json['policy'])
+        formData.append('x-amz-signature', json['x-amz-signature'])
+
+        file.name = json['key']
+        formData.append('file', file);
+    
+        client.onerror = () => {
+            openModal(document.getElementById('error-modal'));
+            resetProgress();
+        }
+
+        client.onload = e => {
+            if (e.target.status == 204) {
+                window.location.replace("/f/" + json['key'])
+            }
+            openModal(document.getElementById('error-modal'));
+            resetProgress();
+        }
+
+        client.upload.onprogress = e => {
+            document.getElementById('progress').value = 100/e.total * e.loaded;
+        }
+
+        document.getElementById('progress').classList.remove('hidden');
+
+        client.open("POST", url)
+        client.send(formData);
+    } else {
+        var formData = new FormData();
+        var client = new XMLHttpRequest();
+        formData.append('file', file);
+
+        client.onerror = e => {
+            openModal(document.getElementById('error-modal'));
+            resetProgress();
+        }
+
+        client.onload = e => {
+            if (e.target.status == 200) {
+                window.location.replace("/f/" + e.target.response)
+            }
+            openModal(document.getElementById('error-modal'));
+            resetProgress();
+        }
+
+        client.upload.onprogress = e => {
+            document.getElementById('progress').value = 100/e.total * e.loaded;
+        }
+
+        document.getElementById('progress').classList.remove('hidden');
+
+        client.open("POST", "u")
+        client.send(formData);
     }
-
-    client.upload.onprogress = e => {
-        document.getElementById('progress').value = 100/e.total * e.loaded;
-    }
-
-    document.getElementById('progress').classList.remove('hidden');
-
-    client.open("POST", "u")
-    client.send(formData);
 }
 
 /**
