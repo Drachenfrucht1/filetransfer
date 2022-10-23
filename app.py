@@ -32,10 +32,11 @@ class FileTransferApp():
         def get_upload_url():
             if not self.storage.extern:
                 return abort()
-
+            
+            filename = request.query['name'] if request.query['name'] else 'name'
             h = hash(datetime.now().timestamp()+random())
             # get a new hash that is not currently in use
-            while self.r.set(h, 'file', ex=10*60, nx=True) == None:
+            while self.r.set(h, filename, ex=10*60, nx=True) == None:
                 h = hash(datetime.now().timestamp()+random())
 
             response = self.storage.store(str(h), None)

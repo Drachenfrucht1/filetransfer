@@ -56,7 +56,7 @@ function dragEnterHandler(e) {
  */
 async function upload() {
     if (extern) {
-        let url_response = await fetch('/u')
+        let url_response = await fetch(`/u?name=${file.name}`)
         if (!url_response.ok) {
             openModal(document.getElementById('error-modal'));
             return

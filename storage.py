@@ -2,7 +2,6 @@ import  abc
 from inspect import signature
 from io import BytesIO
 import json
-import logging
 import os
 import boto3
 from typing import IO, Any
@@ -100,7 +99,6 @@ class S3StorageDriverExtern(StorageDriver):
         params = {'Bucket': self.config['S3_BUCKET'],
                   'Key': id}
         return self._s3_client.generate_presigned_url('get_object', Params=params, ExpiresIn=60)
-
 
     def required_config(self) -> dict[str, Any]:
         return {'S3_ACCESS_KEY': '',
