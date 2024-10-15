@@ -29,3 +29,9 @@ instance.
 - Set ```storage_driver``` in the config file to ```storage.S3StorageDriverExtern```.
 - Point the ```S3_ACCESS_KEY,S3_SECREET_KEY,S3_REGION,S3_ENDPOINT``` and ```S3_BUCKET``` options to a S3 instance.
 - The uploaded files will be stored in the s3 bucket. They will be directly up loaded to the s3 bucket from the webbrowser using presigned urls. The download is directly from the s3 bucket as well using presigned urls.
+
+## Used software
+- [pico.css](https://picocss.com/)
+- [qrcode](https://github.com/davidshimjs/qrcodejs)
+- [Font Awesome](https://fontawesome.com)
+- [bottle](https://bottlepy.org)

@@ -1,9 +1,4 @@
 files
 __pycache__
-static/webfonts
-static/modal.js
-static/pico.min.css
-static/qrcode.js
-static/all.min.css
 config.py
 env
