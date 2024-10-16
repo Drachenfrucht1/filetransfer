@@ -68,14 +68,14 @@ async function upload() {
         
         var json = JSON.parse(url)
         url = json['url']
-        formData.append('key', json['key'])
-        formData.append('x-amz-algorithm', json['x-amz-algorithm'])
-        formData.append('x-amz-credential', json['x-amz-credential'])
-        formData.append('x-amz-date', json['x-amz-date'])
-        formData.append('policy', json['policy'])
-        formData.append('x-amz-signature', json['x-amz-signature'])
+        for (const [key, value] of Object.entries(json)) {
+            if (key == 'url' || key == 'file-name') {
+                continue;
+            }
+            formData.append(key, value)
+        }
 
-        file.name = json['key']
+        file.name = json['file-name']
         formData.append('file', file);
     
         client.onerror = () => {

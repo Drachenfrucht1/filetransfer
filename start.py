@@ -2,11 +2,11 @@ import redis
 
 from config import config
 from app import FileTransferApp
-from storage import FileSystemStorageDriver
+from storage import FileSystemStorageDriver, StorageDriver
 
 import logging
 
-s = None
+s: StorageDriver
 
 def check_config():
     if not 'redis_host' in config:
@@ -15,6 +15,10 @@ def check_config():
         config['redis_port'] = '6379'
     if not 'storage_driver' in config:
         config['storage_driver'] = FileSystemStorageDriver
+
+    for k in config['storage_driver'].required_config():
+        if not k in config:
+            config[k] = config['storage_driver'].required_config()[k]
 
     global s
     try:
@@ -25,9 +29,7 @@ def check_config():
         logging.error('Exiting...')
         exit(2)
 
-    for k in s.required_config():
-        if not k in config:
-            config[k] = s.required_config()[k]
+    
     
 def message_handler(msg):
     data = str(msg['data'], 'utf-8')

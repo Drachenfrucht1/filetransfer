@@ -1,9 +1,8 @@
 # file transfer
 
-
 ## How to use it
 - Drop a file into the drop zone or select one by opening the file browser.
-- The file gets uploaded to the server and you get redirected the download site.
+- Press the upload button to upload the file. You will be automatically redirected to the downlod site.
 - Share the url or qrcode so others can download the file.
 - The file will be deleted after 10 minutes.
 
@@ -29,6 +28,11 @@ instance.
 - Set ```storage_driver``` in the config file to ```storage.S3StorageDriverExtern```.
 - Point the ```S3_ACCESS_KEY,S3_SECREET_KEY,S3_REGION,S3_ENDPOINT``` and ```S3_BUCKET``` options to a S3 instance.
 - The uploaded files will be stored in the s3 bucket. They will be directly up loaded to the s3 bucket from the webbrowser using presigned urls. The download is directly from the s3 bucket as well using presigned urls.
+
+#### Add your own Storage Driver
+- Create a new class inheriting from ```storage.StorageDriver```
+- Implement all the required methods. Look at the documentation of the ```StorageDriver``` class for more information.
+- You can look at the implementation in ```storage.py``` for inspiration.
 
 ## Used software
 - [pico.css](https://picocss.com/)

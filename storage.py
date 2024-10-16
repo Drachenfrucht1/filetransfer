@@ -21,23 +21,66 @@ class StorageDriver(metaclass=abc.ABCMeta):
             NotImplemented)
 
     @abc.abstractmethod
-    def store(self, id, file):
+    def __init__(self, config) -> None:
+        """
+        Initializes the storage driver object. The passed config parameter is guaranteed to contain all required config options.
+
+        :param config: configuration dictionary
+        :returns: None
+        """
+        pass
+
+
+    @abc.abstractmethod
+    def store(self, id, file) -> (None | str):
+        """
+        if not external storage driver: Takes the file object and stores it. The file must be retrievable using the id.
+        if external storage driver: Returns a json string containing a dictionary. The file will be uploaded to the url member of the dictionary.
+        The file name will be set to the 'file-name' value of the dictionary. All other members of the dictionary will be send as POST options for the request.
+
+        :param id: id of the file
+        :param file: none if external storage driver, file to upload otherwise
+        :return: None if not external storage driver, json string otherwise
+        """
         pass
 
     @abc.abstractmethod
     def delete(self, id) -> None:
+        """
+        Deletes the file with the given id
+
+        :param id: id of the file to be deleted
+        :returns: None
+        """
         pass
 
     @abc.abstractmethod
     def get(self, id) -> (str | IO):
+        """
+        if not external storage driver: Returns a IO object that contains the file with the given id
+        if external storage driver: returns url string where the file can be downloaded
+
+        :param id: id of the file to be retrieved
+        :returns: IO object to file if not external storage driver, string with download url otherwise
+        """
         pass
 
+    @staticmethod
     @abc.abstractmethod
-    def required_config(self) -> dict[str, Any]:
+    def required_config() -> dict[str, Any]:
+        """
+        Defines the required config for this. Member names of the returned dictionary are the config parameter names. Values of the dictionary are set as default values.
+        
+        :returns: dictionary with the required config parameters and their default values.
+        """
         pass
 
     @property
     def extern(self) -> bool:
+        """
+        Determines if the storage driver is external or not. External storage drivers only returns urls for the upload and download of the file.
+        The user's webbrowser will then upload the files directly to the storage backend (e.g. using signed urls for S3). Non-external storage drivers handle the file objects directly.
+        """
         return False
 
 class FileSystemStorageDriver(StorageDriver):
@@ -60,7 +103,8 @@ class FileSystemStorageDriver(StorageDriver):
     def get(self, id) -> (str | IO):
         return open(os.path.join(self.config['file_location'], id), 'rb')
 
-    def required_config(self) -> list[str]:
+    @staticmethod
+    def required_config() -> dict[str, Any]:
         return {'file_location': 'files'}
 
 class S3StorageDriverExtern(StorageDriver):
@@ -90,6 +134,7 @@ class S3StorageDriverExtern(StorageDriver):
         for k in response['fields'].keys():
             response[k] = response['fields'][k]
         del response['fields']
+        response['file-name'] = response['key']
         return json.dumps(response)
 
     def delete(self, id) -> None:
@@ -100,7 +145,8 @@ class S3StorageDriverExtern(StorageDriver):
                   'Key': id}
         return self._s3_client.generate_presigned_url('get_object', Params=params, ExpiresIn=60)
 
-    def required_config(self) -> dict[str, Any]:
+    @staticmethod
+    def required_config() -> dict[str, Any]:
         return {'S3_ACCESS_KEY': '',
                 'S3_SECRET_KEY': '',
                 'S3_REGION': '',
@@ -144,8 +190,8 @@ class S3StorageDriver(StorageDriver):
         a = self._s3_client.get_object(Bucket=self.config['S3_BUCKET'], Key=id)['Body'].read()
         return a
 
-
-    def required_config(self) -> dict[str, Any]:
+    @staticmethod
+    def required_config() -> dict[str, Any]:
         return {'S3_ACCESS_KEY': '',
                 'S3_SECRET_KEY': '',
                 'S3_REGION': '',

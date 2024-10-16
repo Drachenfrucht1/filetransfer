@@ -4,16 +4,15 @@ import redis
 from random import random
 from datetime import datetime
 
-
-import storage
+from storage import StorageDriver
 
 app = Bottle()
 
 class FileTransferApp():
     r: redis.Redis
     app = Bottle()
-    storage: storage.StorageDriver
-    def __init__(self, redis: redis.Redis, s: storage.StorageDriver):
+    storage: StorageDriver
+    def __init__(self, redis: redis.Redis, s: StorageDriver):
         self.storage = s
         self.r = redis
 
